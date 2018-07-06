@@ -17,21 +17,24 @@ public class Car {
 	private List<Part> parts;
 
 	public Map<PartType, Integer> getMissingPartsMap() {
-		/*
-		 * Return map of the part types missing.
-		 *
-		 * Each car requires one of each of the following types:
-		 *      ENGINE, ELECTRICAL, FUEL_FILTER, OIL_FILTER
-		 * and four of the type: TIRE
-		 *
-		 * Example: a car only missing three of the four tires should return a map like this:
-		 *
-		 *      {
-		 *          "TIRE": 3
-		 *      }
-		 */
-
-		return null;
+		Map<PartType, Integer> missingParts = new HashMap<PartType, Integer>();
+		EnumSet<PartType> allParts = EnumSet.allOf(PartType.class);
+		
+		for(PartType partType: allParts){
+			boolean partFound = false;
+			Integer tireCount = 4;
+			for(Part carPart: parts){
+				if(carPart.getType().equals(partType))
+					partFound = true;
+				if(carPart.getType().equals(PartType.TIRE))
+					tireCount--;
+			}
+			if(partType == PartType.TIRE && tireCount > 0)
+				missingParts.put(partType, tireCount);
+			else if(!partFound)
+				missingParts.put(partType, 1);
+		}
+		return missingParts;
 	}
 
 	@Override
